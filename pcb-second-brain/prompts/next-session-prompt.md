@@ -19,6 +19,21 @@ decisions, open items, work queue), `pcb-second-brain/README.md`,
 `pcb-second-brain/CLAUDE.md`, and the docs the work item points at. Do not
 re-open settled decisions D1–D12.
 
+Step 0 (only if the owner has created the private repository; Q25):
+if `el18ae/pcb-brain` (or the name the owner gives) exists and is
+attached to the session, move the project there with its history:
+
+```
+git subtree split --prefix=pcb-second-brain -b pcb-brain-main
+git push https://github.com/el18ae/pcb-brain.git pcb-brain-main:main
+```
+
+Then continue all work in the new repository, on `main` or a branch the
+owner names. Update README "Where this lives", and update D12 to say
+golden CAD may now be committed. Do not delete anything from the public
+MSc repository without the owner's explicit go-ahead. If the repository
+does not exist yet, skip this step and work here as before.
+
 This session's work item is **W3 — K1 design notes, part 1** (work queue
 in SESSION-LOG.md; the port / adapt / design-fresh verdict policy is in
 `docs/13-eda-knowledge-ingestion.md` § 13.6; K1 exit criteria are in

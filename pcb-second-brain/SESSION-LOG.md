@@ -32,7 +32,7 @@ queue points at. Keep entries short: decisions, artefacts, open items.
 | D9 | No owner boards; golden boards are web-sourced and vetted; revision-diff ground truth | docs/08 § 8.1 |
 | D10 | Platform is Windows 11 with KiCad and Altium installed; their directories may be mined | docs/10, docs/13 |
 | D11 | Models: Opus 5.5 agent, Fable 5.1 critic/hard generation, Sonnet/Haiku 5.5 extraction via Batches | CLAUDE.md |
-| D12 | Third-party CAD is never committed to this public repository; `golden/<board>/src/` is git-ignored and re-fetched at pinned commits (follows from D5; session 2, owner may override via Q25) | `golden/.gitignore`, docs/11 Q25 |
+| D12 | Until the move to a private repository (Q25 answered: move), third-party CAD is never committed to this public repository; `golden/<board>/src/` is git-ignored and re-fetched at pinned commits (follows from D5; session 2, owner may override via Q25) | `golden/.gitignore`, docs/11 Q25 |
 
 ## Open items (owner)
 
@@ -222,4 +222,21 @@ Open items:
 
 Next: W3, K1 design notes part 1: `io.kicad`, ERC matrix, DRC engine and
 rule evaluator, zone filler. Fable 5.1 is recommended.
+
+### Session 3 addendum — owner answers (2026-11-04)
+
+- Q25: **move the project to a private repository.** The owner creates
+  it, defaulting to `el18ae/pcb-brain` (Q21), and grants the Claude GitHub
+  app access. The next session moves `pcb-second-brain/` there with its
+  history (step 0 of the next-session prompt). After the move, D12 is
+  relaxed and the golden CAD may be committed.
+- Q5: **any viable fab.** W7 becomes fab-agnostic and covers several
+  fabs.
+- Q10: **$200/month Claude Ultra subscription, $0 pay-as-you-go API.**
+  The Batches-API extraction in docs/04 and docs/10 needs a paid key, so
+  W10 must redesign ingestion and the cost model to run under the
+  subscription. Notes were added to docs/04 and docs/10.
+- The owner asked what Q23 (synthetic ATEX boards) and Q26 (no
+  decompilation-derived Altium sources) mean, and both were explained.
+  They stay on their defaults until the owner confirms.
 

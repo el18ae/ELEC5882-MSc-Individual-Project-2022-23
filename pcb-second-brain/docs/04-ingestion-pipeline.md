@@ -46,6 +46,7 @@ acquire → parse → normalise → extract → index
 ## 4.4 Extract (where Claude does the reading)
 
 Batch jobs via the Message Batches API (50% cost), structured outputs with
+> Owner answer Q10 (2026-11-04): the budget is a $200/month Claude Ultra subscription with no pay-as-you-go API spend. Until an API budget is approved, extraction runs inside Claude Code sessions under the subscription instead of the Batches API (W10 to redesign).
 strict schemas, model tiering:
 
 | Extraction | Model | Schema | Validation |

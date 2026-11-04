@@ -55,3 +55,5 @@ Nightly local backup, weekly encrypted off-site copy. No owner boards
 exist yet; when they do, docs/11 Q3 governs whether they may be sent to the
 Anthropic API. Public corpus and tool knowledge may be embedded via a
 cloud API unless Q6 says otherwise.
+
+> Owner answer Q10 (2026-11-04): budget is the $200/month Claude Ultra subscription; API spend is $0 unless approved. The cost model above assumes API billing and must be revised in W10: build and run through Claude Code under the subscription, and keep the API path as an option.

@@ -19,20 +19,20 @@ answered:
   may_show_to_altium_one_day: maybe       # subject to legality and permissions
   decompile_altium: false                 # docs/13 § 13.5
   kicad_code_porting: allowed_with_provenance_tags   # ADR-0001
+  fabs: any_viable                        # Q5: fab-agnostic; W7 covers several fabs, kernel picks one that can build the design
+  budget: {claude_ultra_subscription_usd_per_month: 200, api_usd_per_month: 0}   # Q10: no pay-as-you-go API spend
+  repo: move_to_private                   # Q25: owner creates private repo (default name pcb-brain, Q21); CAD may then be committed
 
 defaults_in_effect:            # change any of these to answer the question
   Q1_existing_brain_stack: unknown
-  Q5_fabs: [jlcpcb, eurocircuits, pcbway]
   Q6_cloud_embeddings_for_public_docs: true
   Q7_regions: [us, eu, uk, apac]
   Q7_regulatory: [ce, ukca, fcc_class_b]
   Q8_api_accounts: [digikey, mouser, nexar_eval]
   Q9_owned_standards: []
-  Q10_budget_usd_per_month: {ingestion: 300, use: 150}
   Q13_deliverable_format: kicad_files_altium_via_importer
   Q20_kicad_cli_as_interim_T1_engine: false
   Q21_repo_name: pcb-brain
   Q23_atex_golden: synthetic_boards_plus_vendor_reference_local_only
   Q24_golden_licences_extra: [Apache-2.0, 0BSD, BSD, GPL-2.0, GPL-3.0, SHL, flagged_NC]
-  Q25_third_party_cad_in_git: false          # public repo; re-fetch via golden/fetch-phase0.sh
   Q26_cite_altium_decompilation_derived_sources: false
