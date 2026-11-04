@@ -2,11 +2,22 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://pcb-brain/schemas/rule.schema.json",
   "title": "Rule",
+  "description": "A kernel rule record. Geometric and DRC rules use the optional fields kind, variant, scope.expr, scope.expr_b, scope.pair, layers, constraint, priority, origin, floor_exempt, enabled and native, defined in schemas/rule-taxonomy.md section 2.",
   "type": "object",
   "required": ["id", "scope", "severity", "title", "check", "provenance", "confidence"],
   "additionalProperties": false,
   "properties": {
     "id": {"type": "string", "pattern": "^[A-Za-z0-9_.-]+$"},
+    "kind": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]*$",
+      "description": "Canonical rule kind id from schemas/rule-taxonomy.md section 3. Omitted for rules that bind only to a check callable."
+    },
+    "variant": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]*$",
+      "description": "Sub-check of a kind that groups several native checks (listed per kind in rule-taxonomy.md section 3)."
+    },
     "scope": {
       "type": "object",
       "description": "At least one selector. A rule applies when every given selector matches.",
@@ -19,14 +30,91 @@
         "fab": {"type": "string"},
         "process": {"type": "string"},
         "std": {"type": "string"},
-        "stage": {"type": "string", "enum": ["schematic","placement","routing","fab","assembly","any"]}
+        "stage": {"type": "string", "enum": ["schematic","placement","routing","fab","assembly","any"]},
+        "expr": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Canonical scope expression (rule-taxonomy.md section 2.4) for the first (or only) object. For a binary rule without expr_b it may name A. and B. explicitly."
+        },
+        "expr_b": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Canonical scope expression for the second object of a binary rule. Not allowed for unary kinds."
+        },
+        "pair": {
+          "type": "array",
+          "uniqueItems": true,
+          "minItems": 1,
+          "items": {"type": "string", "enum": ["same_net","different_net","coupled_diffpair","same_component","different_component","same_layer","adjacent_layer"]},
+          "description": "Relations the object pair must satisfy (Altium NETSCOPE and LAYERKIND, KiCad AB.isCoupledDiffPair())."
+        },
+        "symmetric": {
+          "type": "boolean",
+          "default": true,
+          "description": "Match the pair in either order."
+        }
       },
       "minProperties": 1
     },
-    "severity": {"type": "string", "enum": ["blocker","error","warning","info"]},
+    "layers": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1},
+      "description": "Layer filter: canonical layer ids (cu:1 ... cu:N, silk:top, mask:bottom, edge, user:<name>) or tokens (outer, inner, copper, all); glob wildcards allowed. Omitted = all layers."
+    },
+    "constraint": {
+      "type": "object",
+      "additionalProperties": false,
+      "minProperties": 1,
+      "description": "Rule parameters. min / opt / max are numbers in unit; value carries tokens, flags, lists or expressions.",
+      "properties": {
+        "min": {"type": "number"},
+        "opt": {"type": "number"},
+        "max": {"type": "number"},
+        "unit": {"type": "string", "enum": ["mm","deg","ps","s","count","ratio","percent","ohm","V","mm2","none"]},
+        "value": {"type": ["string","number","boolean","array","object"]},
+        "options": {"type": "object", "description": "Named switches of a kind, e.g. within_diff_pairs for skew."}
+      },
+      "dependentRequired": {"min": ["unit"], "opt": ["unit"], "max": ["unit"]}
+    },
+    "priority": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Order among rules of one kind and origin; 1 is highest (rule-taxonomy.md section 5, P3)."
+    },
+    "origin": {
+      "type": "string",
+      "enum": ["fab_floor","board_floor","tool_default","netclass","item_default","explicit","item_override"],
+      "description": "Precedence tier (rule-taxonomy.md section 5, P1 and P3). item_default: an object-level setting that applies only when no explicit rule matches (KiCad footprint zone connection; a zone's own connection, thermal gap and spoke width)."
+    },
+    "floor_exempt": {
+      "type": "boolean",
+      "default": false,
+      "description": "The rule may resolve below the board floor (never below a fab floor without a waiver)."
+    },
+    "enabled": {"type": "boolean", "default": true},
+    "native": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["tool"],
+      "description": "The tool construct this rule was imported from or is exported to; kept for round trips.",
+      "properties": {
+        "tool": {"type": "string", "enum": ["kicad","altium","eagle"]},
+        "kind": {"type": "string", "description": "Native kind: DRU keyword, board-setup key, Altium RULEKIND, Eagle param name."},
+        "name": {"type": "string", "description": "Native rule name (KiCad rule name, Altium NAME)."},
+        "text": {"type": "string", "description": "Native rule or condition text, verbatim."},
+        "version": {"type": "string", "description": "Tool or file-format version the text belongs to."}
+      }
+    },
+    "severity": {
+      "type": "string",
+      "enum": ["blocker","error","warning","info","ignore","inherit"],
+      "description": "ignore: matched objects produce no finding. inherit: use the rule set's default severity for the kind (rule-taxonomy.md section 2.7)."
+    },
     "title": {"type": "string", "maxLength": 120},
     "description": {"type": "string"},
-    "check": {"type": "string", "description": "Dotted path to a callable in pcbbrain_checks, e.g. pcbbrain_checks.rules.cap_between_pins"},
+    "check": {"type": "string", "description": "Dotted path to a callable in pcbbrain_checks, e.g. pcbbrain_checks.rules.cap_between_pins; for taxonomy kinds pcbbrain_checks.drc.<kind> or pcbbrain_checks.erc.<kind>"},
     "params": {"type": "object"},
     "provenance": {
       "type": "array",

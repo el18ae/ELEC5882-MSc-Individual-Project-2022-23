@@ -49,3 +49,20 @@ diverges from the plan.
 - 2026-11-04 (W1): the cloud network policy refuses `source.mnt.re` and
   `datasheets.raspberrypi.com`. MNT Reform and Raspberry Pi IO-board
   designs are queued for the local phase.
+- 2026-11-04 (W2): KiCad's custom-rule help says matching stops at the
+  first matching rule (`panel_setup_rules_help_6notes.md`). The engine
+  (`pcbnew/drc/drc_engine.cpp`, `applyConstraint`) instead applies every
+  matching rule in file order, each overriding the min/opt/max it sets.
+  The taxonomy follows the code (schemas/rule-taxonomy.md P3, Q-K3).
+- 2026-11-04 (W2): the cloud network policy refuses docs.kicad.org and
+  altium.com. KiCad facts come from source at GitLab
+  `4c23271608ae7fa9e584c6f63b57e54163832c48`. Altium facts come from
+  KiCad's importer, odrive-v3's real `Rules6` records, Altium's DelphiScript
+  sample and web-search snippets. Names that are unconfirmed are marked for
+  L1.
+- 2026-11-04 (W2): none of the ten golden boards uses a `.kicad_dru` file.
+  Their constraints sit in board setup and netclasses (`.kicad_pro`, KiCad 5
+  `(setup)`), Eagle `<designrules>` and Altium `Rules6`. docs/09's K1 exit
+  criterion ("taxonomy covers 100% of rule types in golden boards") is
+  therefore met through board-setup and native rule types, not DRU rules.
+

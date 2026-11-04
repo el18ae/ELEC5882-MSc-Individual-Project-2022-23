@@ -28,6 +28,7 @@ items proceed on the default and are logged.
 | Q23 | Intrinsically safe / ATEX golden boards: no open-licensed IS/ATEX design with complete CAD exists (W1, golden/CANDIDATES.md § 4). Supply or approve real ones? | ATEX quota of the golden set | Synthetic boards built from IEC 60079-11 clause-referenced rules, plus vendor IS reference designs (TI TIDA-01504, ADI CN0270) held locally under their own licences as reference only, not golden |
 | Q24 | Licences accepted for golden boards beyond the docs/08 list (CC-BY/CC-BY-SA/CERN-OHL/MIT/TAPR/OCP) | Size of the candidate pool | Also accept Apache-2.0, 0BSD, BSD, GPL-2.0/3.0, Solderpad; accept non-commercial (CC-BY-NC-SA) with a flag, since the project is never distributed (D5) |
 | Q25 | This repository is public, so third-party CAD is kept out of git (D12) and re-fetched by `golden/fetch-phase0.sh`. Move the project to a private `pcb-brain` repository? | Where golden CAD can live | Keep CAD out of git; move to a private repo when Q21 is settled |
+| Q26 | May the project cite third-party notes derived from decompiled Altium binaries (e.g. published .NET type dumps)? W2 found such sources; D6 forbids decompiling ourselves | Altium rule ordinals and semantics | No. Such citations were removed from `schemas/rule-taxonomy.md`; the facts are marked for L1 confirmation through Altium's scripting interface. File-format observations (KiCad importer, real Rules6 records) stay allowed |
 
 ## Should answer before Phase 2–3
 | # | Question | Default |
