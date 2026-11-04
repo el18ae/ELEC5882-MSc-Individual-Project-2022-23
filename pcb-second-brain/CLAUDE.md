@@ -20,7 +20,11 @@ electronics; do not assume time.
    their installed libraries, docs, templates, examples; read KiCad's source
    from GitLab), interchange formats, and test oracles. This is a personal,
    never-distributed project (ADR-0001): porting KiCad algorithms is
-   allowed if the module header carries `provenance: ported_from_kicad`.
+   allowed only on a "port" verdict from the module's best-known-method
+   review (docs/13 § 13.6), and the module header must carry
+   `provenance: ported_from_kicad`. Modules judged on engineering quality
+   (routing, placement, constraints, high-speed, impedance) are designed
+   fresh from the best sources, not ported.
    **Never decompile, disassemble or instrument Altium binaries**; use
    Altium's scripting interface for black-box observation instead
    (docs/13 § 13.2b and § 13.5).

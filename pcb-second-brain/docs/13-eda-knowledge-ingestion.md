@@ -80,6 +80,26 @@ that the information is not otherwise available, and the table above shows
 it is otherwise available. If the owner ever wants to rely on such an
 exception or to approach Altium, a lawyer should look first.
 
+## 13.6 Port, adapt or design fresh (per-module policy)
+
+Porting KiCad code is permitted (ADR-0001) but is never the default.
+Each kernel module gets a **best-known-method review** in K1 before any
+implementation: the design note compares at least three sources (KiCad,
+Altium observed behaviour, Freerouting, other open tools such as Horizon
+EDA, LibrePCB and pcb-rnd, and academic or vendor literature) and records
+one verdict with reasons. The oracle cross-check applies to every module
+regardless of verdict.
+
+| Verdict | Meaning | Expected modules |
+|---|---|---|
+| **port** | KiCad's implementation is the convention or the best known; translate it, keep its tests, tag `provenance: ported_from_kicad` | `io.kicad`, ERC pin matrix, DRC check semantics (first version), zone filler (Clipper2), Gerber/IPC-2581/drill exporters, footprint generators, calculator formulas, Altium/Eagle importers, integer-nanometre coordinates |
+| **adapt** | KiCad's approach is sound but the data model or interface must change for our needs | `model` (adds provenance, findings, intents, variants), `render`, netlist extraction |
+| **design fresh** | KiCad is weak or absent; better sources exist | Rule engine and constraint model (Altium-style scoped rules with queries), `route` (Freerouting, negotiated congestion, rip-up-and-reroute, published RL approaches), `place` (analytic and constraint-driven placement), length/skew matching and diff-pair tuning, return-path and plane analysis, impedance (2D field solver rather than closed form), SI/PI and thermal estimates, everything AI-specific |
+
+Rule of thumb: port what fabs and files already agree on; design fresh
+where the result is judged by engineering quality rather than by
+conformance.
+
 ## 13.3 Other engines ingested the same way
 
 Freerouting (GPL-3): routing algorithms, DSN/SES formats. ngspice (BSD):
