@@ -15,6 +15,10 @@ answered:
   golden_boards: web_sourced_and_vetted   # no owner boards yet
   platform: windows_11
   installed_tools: [kicad, altium]        # directories may be mined (docs/13)
+  distribution: never                     # personal project; not sold, not distributed, not open-sourced
+  may_show_to_altium_one_day: maybe       # subject to legality and permissions
+  decompile_altium: false                 # docs/13 § 13.5
+  kicad_code_porting: allowed_with_provenance_tags   # ADR-0001
 
 defaults_in_effect:            # change any of these to answer the question
   Q1_existing_brain_stack: unknown
@@ -26,6 +30,5 @@ defaults_in_effect:            # change any of these to answer the question
   Q9_owned_standards: []
   Q10_budget_usd_per_month: {ingestion: 300, use: 150}
   Q13_deliverable_format: kicad_files_altium_via_importer
-  Q19_may_be_distributed: true     # strict clean-room for GPL sources
   Q20_kicad_cli_as_interim_T1_engine: false
   Q21_repo_name: pcb-brain

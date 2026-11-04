@@ -20,8 +20,8 @@ a parallel ingestion track to datasheets and the design corpus (docs/04).
 
 ## 13.2 Altium Designer (installed; version to be recorded)
 
-Touch data files and documentation only. Never decompile, disassemble or
-instrument executables (EULA).
+Touch data files and documentation only, plus the scripting interface
+(§ 13.2b). Never decompile, disassemble or instrument executables (§ 13.5).
 
 | Asset | Where (typical) | What we extract | Used for |
 |---|---|---|---|
@@ -32,6 +32,53 @@ instrument executables (EULA).
 | Help / documentation | `C:\Program Files\Altium\AD<ver>\Help\` and techdocs | Reference for every rule, every editor command, PCB/schematic file concepts, scripting API | Document store (`kind: eda_doc`) |
 | Scripting examples (`.PrjScr`, DelphiScript/JS/VB) | `...\Examples\Scripts\` | The object model (`PCB_Board`, `Sch_Document`, iterators) | Interchange and data-model design input |
 | Project/panel defaults, preferences | `%APPDATA%\Altium\` | Default DRC, grids, layer stacks | Style defaults |
+
+## 13.2b Black-box observation of Altium (legal, high value)
+
+Altium Designer has a scripting system (DelphiScript, JavaScript, VBScript,
+and Python via community bridges) that can open projects, run DRC, export
+reports, iterate every primitive and rule, and drive polygon pours and
+output jobs. Using it is ordinary licensed use. We use it to build an
+**Altium oracle** and to learn Altium's *behaviour* without touching its
+binaries:
+
+| Experiment | What we learn | Feeds |
+|---|---|---|
+| Run DRC on every golden board and on synthetic rule-probe boards (one rule type per board, parameters swept) | Exact semantics of each rule type: how clearance treats arcs and thermal reliefs, how mask slivers and silk-to-mask are measured, what "matched length" tolerance means, how diff-pair gap is enforced on corners | Kernel `drc` semantics; `rule-taxonomy.md` mapping; `oracle.altium.drc` |
+| Pour polygons on probe boards; export the resulting copper | Pour behaviour: thermal relief geometry, island removal, neck width handling | Kernel zone filler |
+| Export Gerber X2/ODB++/IPC-2581 for golden boards | Reference outputs the kernel's exporters must match | Export tests |
+| Iterate primitives on every installed example and library through the scripting object model | The complete object model and attribute set, as data | `io.altium` reader validation (what the reader parses must equal what the scripting API reports) |
+| Run ERC on probe schematics | Altium's ERC matrix and defaults | Kernel `erc` |
+| Export netlists and BOMs for golden boards | Reference netlists | `netlist` tests |
+
+The scripts live in `pcbbrain-eval/altium-oracle/` and run on the owner's
+machine. Their outputs are data about *our* designs produced by software
+we license; nothing of Altium's code is copied.
+
+## 13.5 Decompiling Altium: gain versus cost (decision: no)
+
+| What decompiling could reveal | Is it available another way? | Quality of what decompiling would give |
+|---|---|---|
+| File format record layouts | Yes: KiCad's Altium importers (open source, documented), installed libraries/examples as samples, scripting object model | Redundant |
+| Rule types, parameters, query language | Yes: help, templates, scripting docs | Redundant |
+| DRC semantics and tolerances | Yes: black-box observation (§ 13.2b) gives the observable behaviour exactly | Compiled code without symbols is slower and less reliable than measuring the behaviour |
+| Polygon pour, teardrop, mask algorithms | Mostly: observation plus KiCad's open implementations of the same algorithms | Low |
+| Interactive/auto router internals | Partly: no open equivalent of Altium's router, but decompiled routing code is close to unreadable; Freerouting, KiCad PNS and the published literature teach the algorithms far better | Very low |
+| Footprint wizard math (IPC-7351) | Yes: IPC-7351 itself, KiCad generators | Redundant |
+| Library/vault internals, licensing, UI | Not needed | None |
+
+Costs: breach of the EULA (a contract; private breach is still a breach,
+enforcement risk aside), weeks of effort on unreadable output, and the
+permanent loss of the option to show the project to Altium. Net: the gain
+is near zero and the cost is the one thing the owner said they might want
+to keep. Not done, and recorded as a standing rule in CLAUDE.md.
+
+Note: this is an engineering assessment, not legal advice. Some
+jurisdictions (EU, UK) have statutory interoperability exceptions for
+decompilation that a licence cannot override, but they are narrow, require
+that the information is not otherwise available, and the table above shows
+it is otherwise available. If the owner ever wants to rely on such an
+exception or to approach Altium, a lawyer should look first.
 
 ## 13.3 Other engines ingested the same way
 

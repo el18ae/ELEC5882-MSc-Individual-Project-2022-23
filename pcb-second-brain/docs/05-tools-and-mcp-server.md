@@ -50,8 +50,10 @@ native path.
 
 ## 5.7 `oracle.*` — cross-checks (evaluation only)
 `oracle.kicad.erc/drc/netlist(path)` wrap `kicad-cli` from the local
-KiCad install. Used by `pcbbrain-eval` to diff the kernel's results
-against KiCad's on every golden board. Not available to workflows.
+KiCad install. `oracle.altium.erc/drc/netlist/export(path)` drive the
+installed Altium Designer through its scripting interface (docs/13
+§ 13.2b). Both are used by `pcbbrain-eval` to diff the kernel's results
+against each tool on every golden board. Not available to workflows.
 
 ## 5.8 Cross-cutting
 Run ledger per tool call; citation ids carried into findings; working

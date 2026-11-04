@@ -18,9 +18,12 @@ electronics; do not assume time.
    is reported as "unverified opinion", never as a fact. See ADR-0004.
 4. **We build our own engine.** KiCad and Altium are knowledge sources (read
    their installed libraries, docs, templates, examples; read KiCad's source
-   from GitLab), interchange formats, and test oracles. Clean-room: never
-   copy KiCad code into the kernel; never decompile Altium. See ADR-0001
-   and docs/13.
+   from GitLab), interchange formats, and test oracles. This is a personal,
+   never-distributed project (ADR-0001): porting KiCad algorithms is
+   allowed if the module header carries `provenance: ported_from_kicad`.
+   **Never decompile, disassemble or instrument Altium binaries**; use
+   Altium's scripting interface for black-box observation instead
+   (docs/13 § 13.2b and § 13.5).
 5. **Respect licences.** Do not ingest IPC, IEC, CISPR or other paid standards
    text. Encode rules derived from them with clause references only. Check each
    source's terms in `docs/03` before a crawler is written.

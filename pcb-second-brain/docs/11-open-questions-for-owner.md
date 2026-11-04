@@ -10,6 +10,8 @@ items proceed on the default and are logged.
 | Q4 | Domain priority | **None; all domains equal.** Ingestion and rule quotas are balanced across: power electronics, mixed-signal/instrumentation, MCU/IoT, high-speed digital, RF, motor drive, industrial comms (RS-485/CAN/4–20 mA/HART), intrinsically safe/ATEX, automotive. |
 | Q3 | Golden boards | **None available.** The system selects and vets its own from the web (docs/08 § 8.1). |
 | Q2 | Machine | **Windows 11** with KiCad and Altium installed; their directories may be used to extract all relevant knowledge (docs/13). Specs to be measured in Phase 0. |
+| Q19 | Distribution | **Never sold, distributed or open-sourced; personal project; may be shown to Altium one day subject to legality.** GPL clean-room relaxed with per-module provenance tags (ADR-0001). |
+| Q22 | Decompile Altium binaries? | **No.** Gain is near zero versus documentation, installed data, KiCad's open importers and black-box observation through Altium scripting; cost includes losing the Altium option (docs/13 § 13.5). |
 
 ## Must answer before Phase 0 (defaults apply otherwise)
 | # | Question | Why | Default |
@@ -21,7 +23,6 @@ items proceed on the default and are logged.
 | Q8 | API accounts (Digi-Key, Mouser, Nexar tier, element14, TME, LCSC) | Sourcing coverage | Digi-Key + Mouser + Nexar evaluation tier |
 | Q9 | Standards you own (IPC-2221/2222/7351/A-610, IEC/CISPR) for clause-referenced rule encoding | Legal rule path | Rules from public app notes only |
 | Q10 | Monthly API budget ceiling | Batch sizes, effort | $300/month during ingestion phases, $150/month use |
-| Q19 | Will the software ever be distributed or sold? | Decides how strict the clean-room rule for GPL sources must be (ADR-0001) | Assume yes: strict clean-room |
 | Q20 | May `kicad-cli` be used as the T1 engine *inside* Workflow A temporarily, until the kernel's DRC (K3) replaces it? Shortens time-to-first-review by months; end state unchanged | Schedule | No (pure own-engine path) |
 | Q21 | Name of the software/repo | Naming | `pcb-brain` |
 
