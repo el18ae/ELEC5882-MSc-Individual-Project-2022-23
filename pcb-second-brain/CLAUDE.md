@@ -1,0 +1,60 @@
+# CLAUDE.md — standing instructions for building the PCB Second Brain
+
+You are building the system specified in `docs/`. Read `README.md`, then
+`docs/00` through `docs/11`, then `decisions/`, before writing any code.
+The owner is an electronic and electrical engineer who uses Altium and KiCad
+professionally and wants to touch as little as possible. Assume competence in
+electronics; do not assume time.
+
+## Non-negotiable rules
+
+1. **Deterministic tools are the guard rails, not the model.** Never implement a
+   check as "ask the LLM whether this looks right" when a parser, a rule engine,
+   `kicad-cli`, SPICE or an API lookup can answer it. See ADR-0003.
+2. **No part, pin, footprint or value may be emitted that does not resolve to a
+   record in the parts store.** Hallucinated parts are a release blocker. See ADR-0002.
+3. **Every finding, rule and generated element carries provenance**: source
+   document, page or section, retrieval timestamp. A finding without provenance
+   is reported as "unverified opinion", never as a fact. See ADR-0004.
+4. **KiCad is the canonical substrate.** Altium files are imported into KiCad for
+   analysis and exported back only at the end. See ADR-0001.
+5. **Respect licences.** Do not ingest IPC, IEC, CISPR or other paid standards
+   text. Encode rules derived from them with clause references only. Check each
+   source's terms in `docs/03` before a crawler is written.
+6. **Every phase ends with the evaluation harness passing its exit criteria**
+   (`docs/09`). Do not start the next phase on a "mostly working" one.
+7. **The owner's own boards are the primary test fixtures.** Ask for them in
+   Phase 0 and treat them as confidential: never upload them anywhere except
+   the Claude API calls the owner has authorised.
+
+## Working conventions
+
+- Language: Python 3.12+, managed with `uv`. Type hints everywhere, `ruff` and
+  `mypy --strict` clean before any commit.
+- Repository layout is defined in `docs/01-architecture.md` § Repository layout.
+  Do not invent a different one.
+- Tests: `pytest`. Every checker gets (a) a unit test on a synthetic netlist and
+  (b) a fault-injection test on a golden board. No checker ships without both.
+- Secrets live in `.env` (see `config/env.example`), never in code or docs.
+- Commit small and often, one concern per commit, imperative mood subject line.
+- When a tool, API or library behaves differently from what `docs/` assumes,
+  update the doc in the same commit and note the discrepancy in
+  `docs/12-sources.md` under "Corrections".
+- When you need an owner decision, append it to
+  `docs/11-open-questions-for-owner.md` with your recommended default, apply
+  the default, and continue. Do not block.
+
+## Model usage
+
+- Agent orchestration and design review: `claude-opus-5-5`, adaptive thinking,
+  effort `high` (raise to `xhigh` for review passes on boards with more than
+  ~300 components).
+- Hard second-opinion review passes and generation of new circuit blocks:
+  `claude-fable-5-1`.
+- Bulk extraction during ingestion (pin tables, parametrics, rule candidates):
+  `claude-haiku-5-5` via the Message Batches API, with `claude-sonnet-5-5` for
+  pages Haiku flags as low-confidence.
+- Always use structured outputs (`output_config.format`) for extraction; never
+  parse free text for data.
+- Enable server-side refusal fallbacks (`fallbacks: "default"`) on every
+  Opus/Fable call.

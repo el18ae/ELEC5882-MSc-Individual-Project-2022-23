@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pcb-brain/schemas/rule.schema.json",
+  "title": "Rule",
+  "type": "object",
+  "required": ["id", "scope", "severity", "title", "check", "provenance", "confidence"],
+  "additionalProperties": false,
+  "properties": {
+    "id": {"type": "string", "pattern": "^[A-Za-z0-9_.-]+$"},
+    "scope": {
+      "type": "object",
+      "description": "At least one selector. A rule applies when every given selector matches.",
+      "properties": {
+        "part": {"type": "string"},
+        "part_family": {"type": "string"},
+        "package": {"type": "string"},
+        "interface": {"type": "string", "enum": ["usb2","usb3","ethernet","can","rs485","i2c","spi","uart","lvds","ddr","hdmi","pcie","sdio","jtag","analog_in","4-20mA","other"]},
+        "net_class": {"type": "string"},
+        "fab": {"type": "string"},
+        "process": {"type": "string"},
+        "std": {"type": "string"},
+        "stage": {"type": "string", "enum": ["schematic","placement","routing","fab","assembly","any"]}
+      },
+      "minProperties": 1
+    },
+    "severity": {"type": "string", "enum": ["blocker","error","warning","info"]},
+    "title": {"type": "string", "maxLength": 120},
+    "description": {"type": "string"},
+    "check": {"type": "string", "description": "Dotted path to a callable in pcbbrain_checks, e.g. pcbbrain_checks.rules.cap_between_pins"},
+    "params": {"type": "object"},
+    "provenance": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "doc": {"type": "string"},
+          "section": {"type": "string"},
+          "page": {"type": "integer"},
+          "std": {"type": "string"},
+          "clause": {"type": "string"},
+          "url": {"type": "string"},
+          "corpus_stat": {"type": "string"}
+        }
+      }
+    },
+    "confidence": {"type": "string", "enum": ["high","medium","low"]},
+    "extracted_by": {
+      "type": "object",
+      "properties": {"model": {"type": "string"}, "prompt_version": {"type": "string"}, "extracted_at": {"type": "string", "format": "date-time"}}
+    },
+    "tags": {"type": "array", "items": {"type": "string"}}
+  }
+}

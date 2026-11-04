@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pcb-brain/schemas/finding.schema.json",
+  "title": "Finding",
+  "type": "object",
+  "required": ["id", "tier", "severity", "title", "location", "evidence", "provenance", "confidence", "status"],
+  "additionalProperties": false,
+  "properties": {
+    "id": {"type": "string"},
+    "tier": {"type": "string", "enum": ["T0","T1","T2","T3","T4","T5"]},
+    "rule_id": {"type": "string"},
+    "severity": {"type": "string", "enum": ["blocker","error","warning","info"]},
+    "title": {"type": "string", "maxLength": 140},
+    "location": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "refdes": {"type": "array", "items": {"type": "string"}},
+        "nets": {"type": "array", "items": {"type": "string"}},
+        "sheet": {"type": "string"},
+        "xy_mm": {"type": "array", "items": {"type": "number"}, "minItems": 2, "maxItems": 2},
+        "layer": {"type": "string"},
+        "bom_line": {"type": "integer"}
+      }
+    },
+    "evidence": {"type": "string", "description": "What was observed, in one or two sentences, with numbers."},
+    "provenance": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "doc": {"type": "string"}, "page": {"type": "integer"}, "section": {"type": "string"},
+          "rule_id": {"type": "string"},
+          "std": {"type": "string"}, "clause": {"type": "string"},
+          "corpus_stat": {"type": "string"},
+          "sim_run_id": {"type": "string"},
+          "api_snapshot_id": {"type": "string"},
+          "url": {"type": "string"}
+        }
+      }
+    },
+    "fix": {
+      "type": ["object","null"],
+      "description": "Structured patch. Applied by gen.fix on a working copy.",
+      "properties": {
+        "kind": {"type": "string", "enum": ["add_component","remove_component","change_value","change_part","move","add_track","add_via","set_netclass","set_property","change_stackup","manual"]},
+        "patch": {"type": "object"},
+        "rationale": {"type": "string"}
+      }
+    },
+    "confidence": {"type": "string", "enum": ["high","medium","low","unverified"]},
+    "status": {"type": "string", "enum": ["open","accepted","dismissed","fixed"]},
+    "dismiss_reason": {"type": "string"},
+    "produced_by": {"type": "object", "properties": {"tool": {"type": "string"}, "model": {"type": "string"}, "run_id": {"type": "string"}}}
+  }
+}
