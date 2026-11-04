@@ -56,6 +56,19 @@ T1 engine), Q21 (repo name). See docs/11 and config/owner-answers.yaml.
 | W10 | Local kickoff package: final `prompts/local-kickoff-prompt.md`, install checklist for Windows (uv, Docker Desktop, Java, ngspice, Docling), and the Altium-oracle script skeletons | No | `prompts/`, `pcbbrain-eval/altium-oracle/README.md` |
 | L1 | Everything in docs/09 Phase 0 that touches the machine: inventory KiCad and Altium trees, measure hardware, Docker, oracle baselines | **Yes** | local repo |
 
+## Model and budget guidance for cloud sessions
+
+- Owner has about $58 of cloud credits, then moves to Claude Ultra
+  subscription limits. Sessions must be economical: shallow clones, no
+  re-reading of large files already summarised in the log, batched web
+  lookups, one work item per session.
+- Model per work item: **Opus 5.5** for W1, W2, W7, W8, W9, W10 (research,
+  cataloguing, specification). **Fable 5.1** for W3, W4, W5 (design notes
+  with architectural verdicts) and W6 if budget allows. Fable costs about
+  2.5× Opus per token and consumes subscription allowance faster.
+- Continuity does not depend on the model; it depends on this log and
+  the committed files.
+
 ## Entries
 
 ### Session 1 — 2026-11-04 (cloud)

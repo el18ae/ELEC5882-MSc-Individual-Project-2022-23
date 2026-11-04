@@ -39,6 +39,11 @@ queue in SESSION-LOG.md and the selection and vetting criteria in
    Do not judge them yet; that needs the kernel.
 5. Write `golden/CANDIDATES.md` with the full table and the Phase 0 pick.
 
+Budget: the owner is on limited credits. Be economical: shallow clones
+only (`--depth 1`, or `--filter=blob:none` when history is needed for
+step 4), do not re-read files the session log already summarises, batch
+web lookups, and stop at the end of W1 rather than starting W2.
+
 Work autonomously; apply docs/11 defaults rather than asking. At the end:
 commit on `pcb-second-brain-plan`, push, append a Session 2 entry to
 `SESSION-LOG.md` (decisions, artefacts, open items, next work item), and
