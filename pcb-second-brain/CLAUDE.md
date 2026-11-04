@@ -1,7 +1,7 @@
 # CLAUDE.md — standing instructions for building the PCB Second Brain
 
 You are building the system specified in `docs/`. At the start of every
-session read `SESSION-LOG.md` first (standing decisions D1–D11, open items,
+session read `SESSION-LOG.md` first (standing decisions D1–D12, open items,
 work queue), then `README.md`, then the docs the current work item points
 at. At the end of every session: commit, push, append a session entry to
 `SESSION-LOG.md`, and rewrite `prompts/next-session-prompt.md`.
