@@ -28,7 +28,9 @@ code yet; it is the specification, the decisions, the schemas and the roadmap.
 | 13 | `docs/13-eda-knowledge-ingestion.md` | What to extract from the installed KiCad and Altium, and from KiCad's source, to build our own engine |
 | — | `decisions/ADR-*.md` | The four architecture decisions that everything else depends on |
 | — | `schemas/` | First-cut data schemas (parts, rules, findings, design graph) |
-| — | `prompts/local-kickoff-prompt.md` | The prompt to paste into local Claude Code to start Phase 0 |
+| — | `SESSION-LOG.md` | **Start here each session.** Standing decisions, open items, work queue, per-session entries |
+| — | `prompts/next-session-prompt.md` | The prompt to paste at the start of the next cloud session |
+| — | `prompts/local-kickoff-prompt.md` | The prompt to paste into local Claude Code to start Phase 0 on the Windows machine |
 | — | `CLAUDE.md` | Standing instructions for the local Claude Code session that builds this |
 
 ## One-paragraph summary

@@ -1,7 +1,10 @@
 # CLAUDE.md — standing instructions for building the PCB Second Brain
 
-You are building the system specified in `docs/`. Read `README.md`, then
-`docs/00` through `docs/11`, then `decisions/`, before writing any code.
+You are building the system specified in `docs/`. At the start of every
+session read `SESSION-LOG.md` first (standing decisions D1–D11, open items,
+work queue), then `README.md`, then the docs the current work item points
+at. At the end of every session: commit, push, append a session entry to
+`SESSION-LOG.md`, and rewrite `prompts/next-session-prompt.md`.
 The owner is an electronic and electrical engineer who uses Altium and KiCad
 professionally and wants to touch as little as possible. Assume competence in
 electronics; do not assume time.
