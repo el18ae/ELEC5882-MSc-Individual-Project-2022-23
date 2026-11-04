@@ -40,7 +40,8 @@ Unanswered questions still on defaults: Q1 (existing second-brain stack),
 Q5 (fabs), Q6 (cloud embeddings), Q7 (regions/regulatory), Q8 (API
 accounts), Q9 (owned standards), Q10 (budget), Q20 (kicad-cli as interim
 T1 engine), Q21 (repo name), and from session 2: Q23 (ATEX golden boards),
-Q24 (extra golden-board licences), Q25 (public repo vs private for CAD).
+Q24 (extra golden-board licences), Q25 (public repo vs private for CAD),
+and from session 3: Q26 (no citing of Altium decompilation-derived sources).
 See docs/11 and config/owner-answers.yaml.
 
 ## Work queue for cloud sessions (in order; each is one or two sessions)
@@ -48,7 +49,7 @@ See docs/11 and config/owner-answers.yaml.
 | # | Task | Needs local? | Output |
 |---|---|---|---|
 | W1 ✅ | Golden board selection (done, session 2): build the candidate list across all nine domains with licence, CAD format, revision history and errata availability; attempt downloads where network policy allows; produce the vetting records that do not need the kernel (licence, completeness, revision count) | No | `golden/CANDIDATES.md`, `golden/<board>/PROVENANCE.yaml` |
-| W2 | Rule taxonomy: union of KiCad DRU rule language and Altium rule types from public documentation; bidirectional mapping table | No | `schemas/rule-taxonomy.md` |
+| W2 ✅ | Rule taxonomy (done, session 3): union of KiCad DRU rule language and Altium rule types from public documentation; bidirectional mapping table | No | `schemas/rule-taxonomy.md` |
 | W3 | K1 design notes, part 1: clone KiCad source (GitLab) and write notes with verdicts for `io.kicad` (file formats), ERC matrix, DRC engine and rule evaluator, zone filler | No | `design-notes/*.md` |
 | W4 | K1 design notes, part 2: Altium importer internals (from KiCad source) as the spec for `io.altium`; exporters (Gerber X3, IPC-2581); footprint generators; calculator formulas | No | `design-notes/*.md` |
 | W5 | K1 design notes, part 3 (fresh-design modules): survey routing, placement, constraint models, impedance solvers from Freerouting, literature and other open tools; verdicts and chosen approaches | No | `design-notes/*.md` |
@@ -153,4 +154,72 @@ Open items:
   baseline, BOM resolve) remain for L1/K2.
 
 Next: W2, rule taxonomy (`schemas/rule-taxonomy.md`).
+
+### Session 3 — 2026-11-04 (cloud, same container as session 2)
+
+W2 (rule taxonomy) is complete. The owner asked for it to start
+straight after W1, so it ran in the same session.
+
+Decisions:
+- KiCad rule precedence follows the code, not the help text. Every
+  matching rule applies in file order, and each overrides the min, opt
+  and max it sets (`drc_engine.cpp` `applyConstraint`; checked by hand;
+  docs/12 correction).
+- Sources derived from decompiled Altium binaries (a third-party AD26
+  .NET type dump and a crate built on it) were found and removed. Facts
+  that rested only on them are marked "unverified (L1: confirm via Altium
+  scripting, Q-A12)". This is docs/11 Q26, default applied, following
+  D6. File-format observations stay cited: KiCad's importer, real
+  `Rules6` records, public ASCII PcbDocs, and Altium's own DelphiScript
+  sample.
+- `rule.schema.json` was extended so it can hold geometric/DRC rules.
+  The change is backward-compatible: new optional `kind`, `variant`,
+  `scope.expr`/`expr_b`/`pair`/`symmetric`, `layers`, `constraint`
+  {min,opt,max,unit}, `priority`, `origin`, `floor_exempt`, `enabled`
+  and `native`, plus `ignore`/`inherit` severities. It passes the
+  2020-12 metaschema, and an old interface-rule record still validates.
+
+Artefacts:
+- `schemas/rule-taxonomy.md` (2,366 lines). It defines the canonical
+  rule model and scope-expression grammar, and 129 kinds in 14
+  categories. It maps every KiCad item both ways: 42 constraint types,
+  clauses, 30 board-setup keys, 78 DRC codes, 63 ERC codes, KiCad 5
+  keys and 343 expression properties. It does the same for 70 Altium
+  rule kinds and Eagle's parameters, classes and matrix. It also covers
+  precedence rules P1–P13, export recipes and plug-in points for W7
+  and W8.
+- Golden-board coverage: all 80 constraint kinds used by the ten boards
+  map, and 252 of 254 native keys map. The two exceptions are Eagle
+  `mdSmdStop` (meaning unknown) and `mnLayersViaInSmd` (provisional).
+  All 37 odrive-v3 Altium rules (32 kinds) were parsed from `Rules6` in
+  the cloud with `olefile`, so the Altium boards are not left pending.
+- `design-notes/w2-extracts/A1-kicad-dru.md` and `A2-kicad-setup-erc.md`
+  are cited KiCad extracts kept for W3.
+- docs/11 Q26, docs/12 corrections (help vs code precedence, blocked
+  docs hosts, no `.kicad_dru` in golden boards), and an owner-answers
+  default.
+
+Method and cost:
+- KiCad source came from a GitLab blobless sparse clone at
+  `4c23271608ae7fa9e584c6f63b57e54163832c48` (2026-11-03). docs.kicad.org
+  and altium.com are refused by the network policy; gitlab.com works.
+- One 9-agent workflow ran: 5 extractors, 1 synthesis, 2 independent
+  verifiers that raised 30 issues (all applied), and 1 fixer. Subagents
+  used about 3.9 M tokens, far above the economy guidance. Future
+  sessions should not run multi-agent workflows unless the owner opts
+  in for that session.
+
+Open items:
+- None of the golden boards has a `.kicad_dru` file. The DRU language,
+  binary scopes and explicit priority need synthetic rule-probe boards
+  in K1.
+- The taxonomy's section 8 lists L1 checks: Q-A1–A12 (Altium names,
+  ordinals above 51 and semantics, via scripting), Q-K1–K14 (KiCad
+  behaviour to probe with `kicad-cli`), Q-E1–E8 (Eagle) and Q-G1–G5
+  (general, including whether imported rules keep `floor_exempt`).
+- `creepage` and `impedance_target` exist in the taxonomy but no golden
+  board exercises them.
+
+Next: W3, K1 design notes part 1: `io.kicad`, ERC matrix, DRC engine and
+rule evaluator, zone filler. Fable 5.1 is recommended.
 

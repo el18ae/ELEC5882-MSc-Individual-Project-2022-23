@@ -1,8 +1,10 @@
-# Next-session prompt (cloud, session 3)
+# Next-session prompt (cloud, session 4)
 
 Paste this as the first message of the next Claude Code cloud session on
 the repository `el18ae/ELEC5882-MSc-Individual-Project-2022-23`.
-Recommended model: Opus 5.5 (see SESSION-LOG.md, model and budget guidance).
+Recommended model: Fable 5.1 (design notes with architectural verdicts; see
+SESSION-LOG.md, model and budget guidance). Opus 5.5 is acceptable if
+budget is tight.
 
 ---
 
@@ -17,58 +19,58 @@ decisions, open items, work queue), `pcb-second-brain/README.md`,
 `pcb-second-brain/CLAUDE.md`, and the docs the work item points at. Do not
 re-open settled decisions D1–D12.
 
-This session's work item is **W2 — rule taxonomy** (see the work queue in
-SESSION-LOG.md; K1 exit criterion in `docs/09-roadmap.md`: "taxonomy covers
-100% of rule types in golden boards"; rule record format in
-`schemas/rule.schema.json`; Altium and KiCad knowledge sources in
-`docs/13-eda-knowledge-ingestion.md`):
+This session's work item is **W3 — K1 design notes, part 1** (work queue
+in SESSION-LOG.md; the port / adapt / design-fresh verdict policy is in
+`docs/13-eda-knowledge-ingestion.md` § 13.6; K1 exit criteria are in
+`docs/09-roadmap.md`; kernel module names and layout are in
+`docs/01-architecture.md`):
 
-1. Enumerate the KiCad custom-rule language (`.kicad_dru`): every
-   constraint type, every condition function and property usable in
-   `(condition ...)`, layer and severity clauses, and the built-in board
-   setup constraints that are not DRU rules (`.kicad_pro`
-   `design_settings`, net classes). Source of truth is KiCad's source:
-   the GitHub mirror `KiCad/kicad-source-mirror` (if gitlab.com is
-   refused), files under `pcbnew/drc/` (rule parser, `drc_rule.h`
-   constraint enum, `drc_test_provider_*`) and the DRU syntax help text.
-   Use a blobless, sparse clone of those paths only.
-2. Enumerate Altium Designer design-rule types (electrical, routing, SMT,
-   mask, plane, testpoint, manufacturing, high speed, placement, signal
-   integrity) with their parameters and query-language scoping. Use
-   public Altium documentation if reachable. Otherwise use KiCad's Altium
-   importer source (`pcbnew/pcb_io/altium/` rule parsing) as the record of
-   rule kinds and fields. Record which source each entry came from.
-3. Write `pcb-second-brain/schemas/rule-taxonomy.md` with:
-   - one canonical taxonomy of rule kinds for the kernel (id, meaning,
-     parameters with units, scope model);
-   - a bidirectional mapping table: canonical ↔ KiCad DRU / board setup ↔
-     Altium rule type, with "no equivalent" and "lossy" marked and the
-     loss explained;
-   - how scoping (KiCad conditions vs Altium queries) maps onto one
-     canonical scope expression;
-   - how Eagle DRU settings (`.dru` / `<designrules>` in `.brd`) map, as
-     a short third column, because two Phase 0 boards are Eagle.
-   Check that the taxonomy fits `schemas/rule.schema.json`. Update the
-   schema in the same commit if it does not.
-4. Coverage check against the golden boards. For each Phase 0 board in
-   `golden/phase0.list`, fetch only the rule-bearing files (`*.kicad_dru`,
-   `*.kicad_pro`; for Eagle, the `<designrules>` block of the `.brd`)
-   with `git show <commit>:<path>` from a blobless, no-checkout clone at
-   the commit pinned in its `PROVENANCE.yaml`. Do not check out the full
-   CAD. List every rule or constraint used and confirm each maps to a
-   canonical kind. The Altium boards (odrive-v3) need the local phase,
-   so record them as pending.
-5. Note in the taxonomy where fab capability YAML (W7) and interface rules
-   (W8) will plug in, without writing them.
+1. Clone KiCad from GitLab as a blobless, sparse clone of only the paths
+   each note needs (`gitlab.com` is reachable; docs.kicad.org is not).
+   Pin to commit `4c23271608ae7fa9e584c6f63b57e54163832c48` so the notes
+   line up with `schemas/rule-taxonomy.md` and
+   `design-notes/w2-extracts/`. Reuse those extracts rather than re-reading
+   what they already cite (DRU language, board-setup keys, DRC and ERC
+   codes, pin matrix, test providers).
+2. Write one design note per subsystem under `pcb-second-brain/design-notes/`:
+   - `io-kicad.md`: S-expression `.kicad_pcb` / `.kicad_sch` /
+     `.kicad_sym` / `.kicad_mod` / `.kicad_pro` readers and writers,
+     version handling (KiCad 5 legacy `.sch`/`.lib` and KiCad 5 `(setup)`
+     included, since six Phase 0 boards use them), round-trip fidelity
+     requirements.
+   - `erc.md`: pin-type matrix, net-driver resolution, ERC checks and
+     severities.
+   - `drc-engine.md`: rule compilation, condition evaluator (libeval),
+     constraint resolution (implicit rules, netclass, item overrides,
+     last-match-per-value precedence), the test-provider architecture,
+     spatial indexing, performance.
+   - `zone-filler.md`: fill algorithm, thermal relief, island removal,
+     clearance inflation, polygon library dependencies, determinism.
+   Each note: what KiCad does (file:line citations, paraphrased; no large
+   GPL copies), its known weaknesses (from source comments, issue tracker
+   where reachable), alternatives from the literature or other open tools,
+   and a **verdict** (port / adapt / design fresh) with reasons, a
+   proposed kernel interface (Python signatures, DesignIR types from
+   `schemas/design-graph.md`, canonical rule kinds from
+   `schemas/rule-taxonomy.md`), and test strategy (oracle = `kicad-cli`
+   on golden boards in L1). Any "port" verdict must name the files and
+   the `provenance: ported_from_kicad` header requirement (CLAUDE.md
+   rule 4).
+3. Record cross-cutting decisions (geometry/polygon library choice,
+   integer nm coordinates, determinism) in the notes. If a decision is the
+   owner's, add it to docs/11 with a default.
 
-Budget: the owner is on limited credits. Be economical: sparse, blobless
-clones of the needed paths only; fetch single files with `git show`, not
-full checkouts. Do not re-read files the session log already summarises.
-Batch web lookups. Stop at the end of W2 rather than starting W3.
+Budget: the owner is on limited credits, and session 3 overspent (about
+3.9 M subagent tokens in one workflow). Work single-agent unless the owner
+explicitly opts in to a multi-agent workflow this session. Use sparse,
+blobless clones of needed paths only. Do not re-read files the session log
+or the W2 extracts already summarise. Batch web lookups. Stop at the end
+of W3 rather than starting W4.
 
 Work autonomously; apply docs/11 defaults rather than asking. At the end:
-commit on `pcb-second-brain-plan`, push, append a Session 3 entry to
+commit on `pcb-second-brain-plan`, push, append a Session 4 entry to
 `SESSION-LOG.md` (decisions, artefacts, open items, next work item), and
-rewrite this file for session 4 (W3 — K1 design notes part 1, Fable 5.1
-recommended) in the same format. Finish with a short recap of what was
-found, what was done and what is next.
+rewrite this file for session 5 (W4 — K1 design notes part 2: Altium
+importer internals as the spec for `io.altium`, exporters, footprint
+generators, calculator formulas) in the same format. Finish with a short
+recap of what was found, what was done and what is next.
