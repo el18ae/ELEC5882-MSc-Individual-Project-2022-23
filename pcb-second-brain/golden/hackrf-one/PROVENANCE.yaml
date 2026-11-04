@@ -1,0 +1,28 @@
+# Provenance record for golden board 'hackrf-one' (docs/08 § 8.1, ADR-0004)
+board: hackrf-one
+domain: rf
+source_url: https://github.com/greatscottgadgets/hackrf
+clone_url: https://github.com/greatscottgadgets/hackrf.git
+commit: 468c5d93b66032c892c95bbf9ff15ff1b803e84f
+commit_date: 2026-10-07T10:09:07+02:00
+release: null   # pinned to commit; see tags in GROUND-TRUTH-CANDIDATES.md
+paths: ["hardware/hackrf-one"]
+licence_spdx: GPL-2.0-only
+licence_file: "COPYING"
+licence_quote: "GNU GENERAL PUBLIC LICENSE Version 2, June 1991"
+cad_format: "KiCad (current board KiCad 6+ format; older revisions in KiCad legacy)"
+fetched_at: 2026-11-04T10:29:20Z
+fetched_by: cloud session 2 (W1)
+fetch_method: git clone --filter=blob:none --no-checkout + sparse-checkout (history kept for revision diffs)
+redistribution: none  # local copy only; src/ is git-ignored (D5, D12)
+fetch_commands: |
+  git clone --filter=blob:none --no-checkout https://github.com/greatscottgadgets/hackrf.git golden/hackrf-one/src
+  git -C golden/hackrf-one/src sparse-checkout set --no-cone "/hardware/hackrf-one/"
+  git -C golden/hackrf-one/src checkout 468c5d93b66032c892c95bbf9ff15ff1b803e84f
+vetting:   # filled by the kernel in Phase 0 / K2
+  parsed_by_kernel_io: null
+  component_count: null
+  net_count: null
+  oracle_erc_baseline: null
+  oracle_drc_baseline: null
+  bom_resolve_rate: null

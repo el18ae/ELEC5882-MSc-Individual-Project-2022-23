@@ -1,0 +1,11 @@
+# slug|repo|sparse paths (comma-separated; empty = whole repo)|domain
+hackrf-one|greatscottgadgets/hackrf|hardware/hackrf-one|rf
+glasgow|GlasgowEmbedded/glasgow|hardware/boards/glasgow|mixed_signal_instrumentation
+moteus|mjbots/moteus|hw/c1,hw/controller|motor_drive
+bms-c1|LibreSolar/bms-c1||power_electronics
+jetson-nano-baseboard|antmicro/jetson-nano-baseboard||high_speed_digital
+sh-esp32|hatlabs/SH-ESP32-hardware||industrial_comms
+speeduino-v04|speeduino/Hardware|v0.4|automotive
+esp32-evb|OLIMEX/ESP32-EVB|HARDWARE|mcu_iot
+odrive-v3|odriverobotics/ODriveHardware|v3|motor_drive
+eez-psu-h24005|eez-open/psu-hw||power_electronics

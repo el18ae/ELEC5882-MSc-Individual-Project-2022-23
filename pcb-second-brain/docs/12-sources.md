@@ -35,4 +35,17 @@ diverges from the plan.
 - JLCPCB blog on AI tools by workflow stage: https://jlcpcb.com/blog/ai-tools-for-pcb-design
 
 ## Corrections
-(none yet)
+- 2026-11-04 (W1): foxBMS 2's GitHub repository (`foxBMS/foxbms-2`) holds
+  no CAD; the open foxBMS hardware on GitHub is foxBMS 1
+  (`foxBMS/foxBMS-hardware`, Eagle, CC-BY-4.0, archived).
+- 2026-11-04 (W1): `greatscottgadgets/greatfet` holds no CAD, and
+  `greatfet-hardware` is archived as deprecated. GreatFET is not usable as
+  a golden board.
+- 2026-11-04 (W1): no open-licensed intrinsically safe / ATEX design with
+  complete CAD was found (golden/CANDIDATES.md § 4). docs/11 Q23 records
+  the substitute.
+- 2026-11-04 (W1): the docs/08 § 8.1 licence list was too narrow for the
+  real pool. It was widened per docs/11 Q24.
+- 2026-11-04 (W1): the cloud network policy refuses `source.mnt.re` and
+  `datasheets.raspberrypi.com`. MNT Reform and Raspberry Pi IO-board
+  designs are queued for the local phase.

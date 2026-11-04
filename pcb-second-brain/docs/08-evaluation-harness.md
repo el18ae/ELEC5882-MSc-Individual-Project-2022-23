@@ -7,7 +7,8 @@ or models.
 ## 8.1 Golden set (sourced and vetted from the web; no owner boards yet)
 
 Selection criteria (all must hold):
-1. Licence permits use as test data (CC-BY/CC-BY-SA/CERN-OHL/MIT/TAPR/OCP);
+1. Licence permits use as test data (CC-BY/CC-BY-SA/CERN-OHL/MIT/TAPR/OCP,
+   plus Apache-2.0/0BSD/BSD/GPL/Solderpad and flagged NC licences per docs/11 Q24);
    recorded per board.
 2. Complete CAD: schematic + board + libraries (or vendor libraries
    resolvable), not just PDFs. KiCad, Altium or Eagle.

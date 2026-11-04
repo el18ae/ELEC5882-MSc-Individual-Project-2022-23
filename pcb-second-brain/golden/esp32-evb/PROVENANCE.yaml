@@ -1,0 +1,28 @@
+# Provenance record for golden board 'esp32-evb' (docs/08 § 8.1, ADR-0004)
+board: esp32-evb
+domain: mcu_iot
+source_url: https://github.com/OLIMEX/ESP32-EVB
+clone_url: https://github.com/OLIMEX/ESP32-EVB.git
+commit: a3ec2f448109cb8f35ce7cb21a027bb7c837ab61
+commit_date: 2026-01-19T16:01:53+02:00
+release: null   # pinned to commit; see tags in GROUND-TRUTH-CANDIDATES.md
+paths: ["HARDWARE"]
+licence_spdx: Apache-2.0
+licence_file: "LICENSE"
+licence_quote: "Apache License Version 2.0, January 2004"
+cad_format: "KiCad (legacy .sch in early revisions; KiCad 6+ later)"
+fetched_at: 2026-11-04T10:29:20Z
+fetched_by: cloud session 2 (W1)
+fetch_method: git clone --filter=blob:none --no-checkout + sparse-checkout (history kept for revision diffs)
+redistribution: none  # local copy only; src/ is git-ignored (D5, D12)
+fetch_commands: |
+  git clone --filter=blob:none --no-checkout https://github.com/OLIMEX/ESP32-EVB.git golden/esp32-evb/src
+  git -C golden/esp32-evb/src sparse-checkout set --no-cone "/HARDWARE/"
+  git -C golden/esp32-evb/src checkout a3ec2f448109cb8f35ce7cb21a027bb7c837ab61
+vetting:   # filled by the kernel in Phase 0 / K2
+  parsed_by_kernel_io: null
+  component_count: null
+  net_count: null
+  oracle_erc_baseline: null
+  oracle_drc_baseline: null
+  bom_resolve_rate: null

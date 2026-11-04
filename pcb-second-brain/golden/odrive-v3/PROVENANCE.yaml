@@ -1,0 +1,28 @@
+# Provenance record for golden board 'odrive-v3' (docs/08 § 8.1, ADR-0004)
+board: odrive-v3
+domain: motor_drive
+source_url: https://github.com/odriverobotics/ODriveHardware
+clone_url: https://github.com/odriverobotics/ODriveHardware.git
+commit: 079f30ac58f193226fcc552e4d6ba24553027ee1
+commit_date: 2018-11-15T19:48:32-08:00
+release: null   # pinned to commit; see tags in GROUND-TRUTH-CANDIDATES.md
+paths: ["v3"]
+licence_spdx: MIT
+licence_file: "LICENSE"
+licence_quote: "The MIT License (MIT) Copyright (c) 2016 Oskar Weigl (madcowswe)"
+cad_format: "Altium Designer (.PcbDoc/.SchDoc/.PrjPcb, binary)"
+fetched_at: 2026-11-04T10:29:20Z
+fetched_by: cloud session 2 (W1)
+fetch_method: git clone --filter=blob:none --no-checkout + sparse-checkout (history kept for revision diffs)
+redistribution: none  # local copy only; src/ is git-ignored (D5, D12)
+fetch_commands: |
+  git clone --filter=blob:none --no-checkout https://github.com/odriverobotics/ODriveHardware.git golden/odrive-v3/src
+  git -C golden/odrive-v3/src sparse-checkout set --no-cone "/v3/"
+  git -C golden/odrive-v3/src checkout 079f30ac58f193226fcc552e4d6ba24553027ee1
+vetting:   # filled by the kernel in Phase 0 / K2
+  parsed_by_kernel_io: null
+  component_count: null
+  net_count: null
+  oracle_erc_baseline: null
+  oracle_drc_baseline: null
+  bom_resolve_rate: null

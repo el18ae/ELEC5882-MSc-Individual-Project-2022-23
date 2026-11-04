@@ -1,0 +1,28 @@
+# Provenance record for golden board 'moteus' (docs/08 § 8.1, ADR-0004)
+board: moteus
+domain: motor_drive
+source_url: https://github.com/mjbots/moteus
+clone_url: https://github.com/mjbots/moteus.git
+commit: aec03338883359fae7b32df6d56974958448c67e
+commit_date: 2026-11-03T14:31:27-05:00
+release: null   # pinned to commit; see tags in GROUND-TRUTH-CANDIDATES.md
+paths: ["hw/c1", "hw/controller"]
+licence_spdx: Apache-2.0
+licence_file: "LICENSE"
+licence_quote: "Apache License Version 2.0, January 2004 ... README: available under an Apache 2.0 License"
+cad_format: "Eagle XML (hw/controller r4.x) and KiCad 6+ (hw/c1 r1.x)"
+fetched_at: 2026-11-04T10:29:20Z
+fetched_by: cloud session 2 (W1)
+fetch_method: git clone --filter=blob:none --no-checkout + sparse-checkout (history kept for revision diffs)
+redistribution: none  # local copy only; src/ is git-ignored (D5, D12)
+fetch_commands: |
+  git clone --filter=blob:none --no-checkout https://github.com/mjbots/moteus.git golden/moteus/src
+  git -C golden/moteus/src sparse-checkout set --no-cone "/hw/c1/" "/hw/controller/"
+  git -C golden/moteus/src checkout aec03338883359fae7b32df6d56974958448c67e
+vetting:   # filled by the kernel in Phase 0 / K2
+  parsed_by_kernel_io: null
+  component_count: null
+  net_count: null
+  oracle_erc_baseline: null
+  oracle_drc_baseline: null
+  bom_resolve_rate: null

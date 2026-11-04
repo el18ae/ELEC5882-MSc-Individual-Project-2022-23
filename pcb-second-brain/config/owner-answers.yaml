@@ -32,3 +32,6 @@ defaults_in_effect:            # change any of these to answer the question
   Q13_deliverable_format: kicad_files_altium_via_importer
   Q20_kicad_cli_as_interim_T1_engine: false
   Q21_repo_name: pcb-brain
+  Q23_atex_golden: synthetic_boards_plus_vendor_reference_local_only
+  Q24_golden_licences_extra: [Apache-2.0, 0BSD, BSD, GPL-2.0, GPL-3.0, SHL, flagged_NC]
+  Q25_third_party_cad_in_git: false          # public repo; re-fetch via golden/fetch-phase0.sh

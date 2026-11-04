@@ -25,6 +25,9 @@ items proceed on the default and are logged.
 | Q10 | Monthly API budget ceiling | Batch sizes, effort | $300/month during ingestion phases, $150/month use |
 | Q20 | May `kicad-cli` be used as the T1 engine *inside* Workflow A temporarily, until the kernel's DRC (K3) replaces it? Shortens time-to-first-review by months; end state unchanged | Schedule | No (pure own-engine path) |
 | Q21 | Name of the software/repo | Naming | `pcb-brain` |
+| Q23 | Intrinsically safe / ATEX golden boards: no open-licensed IS/ATEX design with complete CAD exists (W1, golden/CANDIDATES.md § 4). Supply or approve real ones? | ATEX quota of the golden set | Synthetic boards built from IEC 60079-11 clause-referenced rules, plus vendor IS reference designs (TI TIDA-01504, ADI CN0270) held locally under their own licences as reference only, not golden |
+| Q24 | Licences accepted for golden boards beyond the docs/08 list (CC-BY/CC-BY-SA/CERN-OHL/MIT/TAPR/OCP) | Size of the candidate pool | Also accept Apache-2.0, 0BSD, BSD, GPL-2.0/3.0, Solderpad; accept non-commercial (CC-BY-NC-SA) with a flag, since the project is never distributed (D5) |
+| Q25 | This repository is public, so third-party CAD is kept out of git (D12) and re-fetched by `golden/fetch-phase0.sh`. Move the project to a private `pcb-brain` repository? | Where golden CAD can live | Keep CAD out of git; move to a private repo when Q21 is settled |
 
 ## Should answer before Phase 2–3
 | # | Question | Default |
