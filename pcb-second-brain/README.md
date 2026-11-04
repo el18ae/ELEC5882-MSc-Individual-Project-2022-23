@@ -25,6 +25,7 @@ code yet; it is the specification, the decisions, the schemas and the roadmap.
 | 10 | `docs/10-stack-and-hardware.md` | Concrete software stack, local hardware, model choice, cost model |
 | 11 | `docs/11-open-questions-for-owner.md` | **The instructions you have not given yet.** Answer these before the local kickoff |
 | 12 | `docs/12-sources.md` | Links consulted while writing this plan |
+| 13 | `docs/13-eda-knowledge-ingestion.md` | What to extract from the installed KiCad and Altium, and from KiCad's source, to build our own engine |
 | — | `decisions/ADR-*.md` | The four architecture decisions that everything else depends on |
 | — | `schemas/` | First-cut data schemas (parts, rules, findings, design graph) |
 | — | `prompts/local-kickoff-prompt.md` | The prompt to paste into local Claude Code to start Phase 0 |
@@ -34,13 +35,15 @@ code yet; it is the specification, the decisions, the schemas and the roadmap.
 
 The system never lets a language model free-hand a circuit. The model proposes
 structured intermediate representations (parts, nets, placement intents) that
-are compiled by deterministic tools into KiCad projects, then checked by ERC/DRC,
-manufacturer rule files, datasheet-derived rules, sourcing APIs, simulation and
-precedent lookups against a corpus of open reference designs. Every finding
+our own engine (the kernel) builds into designs, then checks with its own
+ERC/DRC, manufacturer rule sets, datasheet-derived rules, sourcing APIs,
+simulation and precedent lookups against a corpus of vetted open reference
+designs. KiCad and Altium are ingested as knowledge to build that engine, read
+and written as interchange formats, and used as independent test oracles. Every finding
 carries a citation back to a datasheet page, a rule, a manufacturer document or
 a reference design. The model's job is orchestration, judgement and explanation;
 the tools' job is truth. Trust is extended one rung at a time as the evaluation
-harness proves each capability on your own boards.
+harness proves each capability on vetted real boards.
 
 ## Where this lives
 

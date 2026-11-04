@@ -1,41 +1,50 @@
 # 09 — Roadmap
 
-Effort assumes Claude Code does the implementation and you give ~1–2 hours
-per week of decisions and review. Durations are calendar, sequential, and
-deliberately conservative; several phases can overlap once Phase 1 is in.
+Two parallel tracks: **K** (kernel: our own engine) and **N** (knowledge,
+checks, agent). N depends on K for anything that reads a design. Effort
+assumes Claude Code implements and you give ~1–2 hours a week of decisions
+and sampling. Durations are calendar and conservative.
 
-| Phase | Goal | Duration | Exit criteria |
-|---|---|---|---|
-| **0 Foundations** | Answer docs/11; stand up repo, `uv`, Postgres+pgvector, KiCad 10 + kicad-cli + kipy, atopile, Freerouting, ngspice; collect owner boards into `golden/`; import Altium → KiCad for all of them | 1 week | All owner boards parse to DesignIR; CI runs; ADRs accepted |
-| **1 Deterministic review (T0–T1)** | Parsers, DesignIR, fab capability YAML + DRU for your 2–3 fabs, kicad-cli ERC/DRC wrapper, Finding schema, report generator, MCP server skeleton with `eda.*` and `check.*` | 2–3 weeks | Workflow A runs T0–T1 on every owner board; fault-injection recall 100% for T1 classes |
-| **2 Parts and sourcing** | Parts store; Digi-Key, Mouser, Nexar, LCSC clients; MPN normalisation; `source.*` tools; BOM health; nightly lifecycle job | 3–4 weeks | Every owner BOM line resolved or explicitly stubbed; worldwide-availability check correct on a hand-verified 50-part sample |
-| **3 Documents and rules** | Datasheet/app-note crawler for all resolved parts; Docling parsing; pin-table and rule extraction via Batches; rules store; T2 engine; first 200 rules (your top parts + interfaces + fab non-DRU) | 4–6 weeks | T2 recall ≥ 0.9 on injected faults; pin tables match package counts ≥ 90%; weekly rule review loop running |
-| **4 Design corpus and precedent** | Crawlers for Adafruit/SparkFun/Olimex/RPi/Beagle/OCP/vendor refs (licence-gated); import to KiCad; motif mining; layout stats; T3 checks | 4–6 weeks | ≥ 2,000 designs ingested; motifs for your top-100 parts; T3 findings on owner boards judged useful by you ≥ 70% |
-| **5 Model review and evals** | Workflow A end-to-end with Opus review + Fable critic; eval harness complete; trust ladder rungs 1–2 earned on owner boards | 3–4 weeks | Metrics in docs/08 met; you accept auto-apply for rung-1 classes |
-| **6 Generation** | atopile IR, compiler path, `gen.block`, block library, Workflow C; T4 SPICE for regulators/filters; Workflow D | 6–8 weeks | 50-block eval passes; one owner board re-created from requirements with functional-equivalence ≥ 0.9 |
-| **7 Layout** | Placement intents + placer, net classes from rules, Freerouting integration, return-path and impedance checks, Workflow E; optional commercial router | 6–10 weeks | Layout eval; blind review on 5 boards |
-| **8 Hardening and hand-off** | Managed Agents or scheduled local runs; nightly BOM watch; Altium export path; docs; backups | 2–3 weeks | You can run every workflow from a single command/prompt |
+| Phase | Track | Goal | Duration | Exit criteria |
+|---|---|---|---|---|
+| **0 Foundations** | both | Answer docs/11; repo, `uv`, Postgres+pgvector (Docker Desktop); inventory and licence-tag the KiCad and Altium install trees (docs/13 § 13.4 step 1); clone KiCad and Freerouting source; pick and vet the first 10 golden boards from the web (docs/08 § 8.1) | 1–2 weeks | Inventory complete; 10 golden boards downloaded with licence records; CI runs; ADRs accepted |
+| **K1 Design notes** | K | Read KiCad source, Altium docs/examples, Freerouting; write `design-notes/` per subsystem; draft `schemas/rule-taxonomy.md` (union of DRU + Altium rule types) | 3–4 weeks | Notes reviewed by you for the three subsystems you care most about; taxonomy covers 100% of rule types in golden boards |
+| **K2 Model + I/O** | K | `model`, `geom`, `io.kicad` (read/write), `io.altium` (read), `io.eagle`; round-trip tests against `oracle.*` | 5–7 weeks | All golden boards round-trip with identical `kicad-cli` ERC/DRC and netlist; Altium examples parse with 100% component/net recovery |
+| **K3 ERC/DRC/netlist/render** | K | `erc`, `drc` with the rule language, `netlist`, `render`, `export` (Gerber X3, IPC-2581, BOM/pos) | 5–7 weeks | Kernel DRC matches oracle DRC on golden boards (same violations ±0); Gerbers accepted by a fab's online checker |
+| **1 Deterministic review (T0–T1)** | N | Finding schema, fab capability YAML + rule sets, report generator, MCP server with `kernel.*`, `check.*` T0–T1 | 2–3 weeks (overlaps K3) | Workflow A T0–T1 on every golden board; fault-injection recall 100% for T1 classes |
+| **2 Parts and sourcing** | N | Parts store seeded from KiCad + Altium libraries; distributor clients; `source.*`; nightly lifecycle job | 3–4 weeks (overlaps K2) | Golden BOM lines resolved or stubbed; availability verified on 50-part sample |
+| **3 Documents and rules** | N | Datasheet/app-note crawler; Docling; extraction via Batches; rules store; T2 engine; first 300 rules spanning all domains equally | 5–7 weeks | T2 recall ≥ 0.9; pin tables ≥ 90% match; weekly rule review loop |
+| **4 Design corpus and precedent** | N | Corpus crawlers (licence-gated), all through `kernel.io`; motif mining; layout stats; T3; **revision-diff ground truth** (docs/08) | 5–7 weeks | ≥ 2,000 designs; motifs for top-200 parts across domains; T3 judged useful ≥ 70% |
+| **5 Model review and evals** | N | Workflow A end-to-end with Opus review + Fable critic; eval harness; trust rungs 1–2 | 3–4 weeks | docs/08 metrics met |
+| **6 Generation** | N+K | JSON IR, `gen.block`, block library, Workflow C/D, T4 SPICE, `place` v1 | 7–9 weeks | 50-block eval; one golden board re-created from its requirements, equivalence ≥ 0.9 |
+| **7 Layout** | K+N | `place` v2, own `route` (Freerouting via DSN as interim), return-path and impedance checks, Workflow E | 10–14 weeks | Layout eval; blind review on 5 boards |
+| **8 Hardening and hand-off** | both | Scheduled runs, nightly BOM watch, backups, docs | 2–3 weeks | Every workflow from one prompt |
 
-Total: roughly 8–11 months of calendar time at the stated human involvement;
-Phases 1–5 (the review assistant, which already removes most of the second-
-eye burden) in roughly 4 months.
+Total: roughly 14–18 months of calendar time at the stated human
+involvement. The review assistant (through Phase 5) lands at roughly 7–8
+months because the kernel sits in front of it. If that is too slow, the
+one lever that shortens it without changing the end state is temporarily
+using `oracle.*` (kicad-cli) as the T1 engine inside Workflow A until K3
+replaces it; that is an owner decision (docs/11 Q20).
 
 ## Ordering rationale
+- Kernel I/O and DRC come first because every later tier reads designs
+  through them and because the oracle cross-check gives a hard,
+  independent correctness target for free.
+- Review before generation: review produces rules and ground truth that
+  generation is later checked against.
+- All domains equal: ingestion is ordered by data availability and
+  licence clarity, not by domain; rule extraction quotas are balanced
+  across the domain list in docs/11 Q4.
+- Layout last: it has the weakest open knowledge and the highest
+  dependence on everything above.
 
-- Review before generation: review produces the ground truth and the rules
-  that generation is later checked against. It is also useful from week 3.
-- Your boards first: they define "as good as me".
-- Rules before corpus: rules are high-precision; precedent is high-recall.
-  Precision first keeps early trust.
-- Layout last: it has the weakest open tooling and the highest dependence on
-  everything above.
-
-## Phase 0 task list (what the local kickoff prompt will execute)
-
-1. Create `pcb-brain` repo with the layout in docs/01; copy this folder into `docs/`.
-2. `uv init`; add packages; `ruff`, `mypy`, `pytest`; pre-commit.
-3. `docker compose` for Postgres 16 + pgvector; alembic migrations from `schemas/parts.sql`.
-4. Install KiCad 10 (verify `kicad-cli --version`, enable IPC API, test `kipy` connection), atopile, Freerouting jar, ngspice; record versions in `docs/10`.
-5. Ingest owner boards: import Altium → KiCad, parse to DesignIR, snapshot in `golden/`.
-6. Write the first fab capability YAML (your main fab) and generate its DRU; run `kicad-cli pcb drc` on an owner board; emit Findings; render report.
-7. Open docs/11 questions as a checklist file and fill defaults where you did not answer.
+## Phase 0 task list (executed by `prompts/local-kickoff-prompt.md`)
+1. Create `pcb-brain` with the layout in docs/01; copy this plan to `docs/plan/`.
+2. `uv`, packages, `ruff`, `mypy --strict`, `pytest`, pre-commit; Docker Desktop with Postgres 16 + pgvector; Alembic from `schemas/parts.sql`.
+3. Record the machine (CPU, RAM, GPU, disk, Windows build, KiCad and Altium versions and install paths) in docs/10 § Measured.
+4. Inventory the KiCad and Altium install trees (docs/13); write `data/inventory/*.jsonl` with licence tags; parse KiCad symbol and footprint libraries into the parts/footprint stores as a first smoke test.
+5. Clone KiCad and Freerouting source into `data/raw/source/` (GPL-3 recorded); begin `design-notes/` with the file-format and DRC subsystems.
+6. Golden boards: run the selection and vetting procedure in docs/08 § 8.1 for the first 10 boards across the domain list; store under `golden/` with licence and provenance records.
+7. Run `oracle.kicad.drc` on each golden board to capture the baseline the kernel must match.
+8. Write `config/owner-answers.yaml` from docs/11 with defaults filled.

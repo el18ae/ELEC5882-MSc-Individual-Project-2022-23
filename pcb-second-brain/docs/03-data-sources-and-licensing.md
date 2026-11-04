@@ -47,11 +47,22 @@ per source so this is auditable.
 | KiCad demo projects, KiCad "Made with KiCad" | KiCad | Various | Clean KiCad idioms |
 | OSHWA certified projects directory | Various | Open hardware licences | Discovery index |
 | Vendor eval boards and reference designs: TI (TIDA, EVM design files), ADI (CN-0xxx, EVAL boards), NXP, ST (Nucleo/Discovery CAD), Microchip, Espressif (DevKit schematics, some KiCad), Nordic (nRF DK), NVIDIA Jetson Orin Nano/NX carrier reference (design files via developer account), AMD/Xilinx eval board schematics (PDF), Intel platform schematics where public | Altium / Allegro / KiCad / PDF | **Vendor-specific licences; TI's design-file licence and NVIDIA's developer terms restrict redistribution and sometimes derivative use. Record and respect each.** | The "big guys" precedent. Schematic PDFs without CAD still yield netlists via PDF schematic parsing (Phase 4 stretch) |
-| Your own past boards | Altium / KiCad | Yours | The most important corpus of all |
+| Your own future boards | Altium / KiCad | Yours | Added as they are made; none exist in the corpus yet |
 
-Eagle and Altium files are imported through KiCad's importers (`kicad-cli`
-and the GUI importers; see docs/04) so that one parser (KiCad s-expression)
-covers the whole corpus. Allegro files are not importable; use their PDFs.
+Eagle and Altium files are read by the kernel's own readers (`io.eagle`,
+`io.altium`), written from the design notes in docs/13. Allegro files are
+not readable; use their PDFs.
+
+## 3.3b EDA tool knowledge (see docs/13)
+
+| Source | Licence | Use |
+|---|---|---|
+| KiCad source (GitLab) | GPL-3 | Read for design notes; clean-room implementation (ADR-0001) |
+| KiCad symbol/footprint/3D libraries | CC-BY-SA 4.0 + KiCad library exception | Parts/footprint store seed; may be used in designs freely |
+| KiCad documentation | GPL-3 / CC-BY | Document store |
+| Altium installed libraries, templates, examples, help, scripting docs | Altium EULA: personal use of installed content; no decompiling | Parts seed, rule taxonomy, document store, design notes |
+| Freerouting source | GPL-3 | Design notes for `route` |
+| ngspice | BSD | Simulation driver |
 
 ## 3.4 Fab and assembly capability
 
@@ -74,10 +85,11 @@ design-rule document.
 
 ## 3.6 Sizing
 
-Start narrow and widen: ingest datasheets and corpus for (a) every part in
-your own BOMs, (b) the top ~5,000 parts by Octopart/Digi-Key popularity in
-your categories, (c) every part used in the open corpus you pull. That is
-on the order of 20–50 k documents and 2–5 k designs, roughly 100–300 GB raw.
+All domains are equal, so scope by breadth: (a) every part in the KiCad and
+Altium installed libraries that resolves to a live MPN, (b) the top ~1,000
+parts by distributor popularity in each of the ~9 domains, (c) every part
+used in the vetted golden boards and the open corpus. That is on the order
+of 60–100 k documents and 2–5 k designs, roughly 150–400 GB raw.
 Full-catalogue ingestion (millions of datasheets) is a later, optional step
 and is only worth it for parametric search, which the distributor APIs
 already provide live.

@@ -81,7 +81,7 @@ Rule classes:
   strapping, decoupling, thermal pad connection, exposed pad vias.
 - **Interface rules** (USB, Ethernet, DDR, I2C, SPI, CAN, RS-485, LVDS):
   termination, impedance, length matching, ESD placement.
-- **Fab/assembly rules** (per manufacturer): compiled to `.kicad_dru` plus
+- **Fab/assembly rules** (per manufacturer): compiled to kernel rule sets plus
   non-DRU constraints (silkscreen over pads, panelisation, fiducials, part
   orientation for assembly).
 - **EMC/SI hygiene rules** (from open design guides and clause references of
@@ -98,12 +98,12 @@ min trace/space, min drill, annular ring, via-in-pad allowed, solder mask
 dam, silkscreen min width, max board size, available stackups with
 impedance per geometry, copper weights, surface finishes, assembly
 constraints. Source: capability pages, scraped and human-checked, with a
-`verified_at` date and the URL. Exported as `.kicad_dru` + stackup JSON.
+`verified_at` date and the URL. Exported as kernel rule sets (and `.kicad_dru` for oracle runs) + stackup JSON.
 
 ## 2.6 Project memory (yours)
 
-Your past boards (parsed into the design corpus with `tags: [owner]`), past
-review reports and what you accepted or rejected, preferred parts and series,
+Your future boards (parsed into the design corpus with `tags: [owner]` as
+they are made), review reports and what you accepted or rejected, preferred parts and series,
 preferred fabs, naming conventions. This is what makes the system behave like
 *you* rather than like the average of the internet. Stored in the same
 tables with an `owner` flag; never leaves the machine except in API calls you

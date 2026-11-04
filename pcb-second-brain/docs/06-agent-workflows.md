@@ -10,9 +10,9 @@ Each workflow is a named prompt + tool allow-list + gates, stored in
 Input: a KiCad or Altium project, target fab/process, target markets
 (regions, regulatory regime), production quantity, optional focus list.
 
-1. `eda.import` if needed → `eda.netlist` → DesignIR.
+1. `kernel.open` → `kernel.netlist` → DesignIR.
 2. `check.unresolved_parts` → every BOM line resolved or flagged.
-3. `check.run` T1 (ERC/DRC with fab DRU) → T2 (rules for every part and
+3. `check.run` T1 (kernel ERC/DRC with the fab rule set) → T2 (rules for every part and
    interface present) → T3 (precedent: missing motifs, outlier layout stats)
    → T4 (targeted simulation where rules request it: LDO stability with the
    chosen output cap, buck ripple, RC filter corner).
@@ -38,7 +38,7 @@ Exit: a report you would be comfortable sending to a colleague as your own.
 Input: BOM (from A or standalone), quantity, regions, assembler.
 Produces: per-line health, alternates with footprint compatibility proof,
 cost at quantity, risk summary (single-source, EOL, long lead), proposed
-BOM changes as a patch. Scheduled re-runs on owner boards (nightly) raise
+BOM changes as a patch. Scheduled re-runs on watched boards (nightly) raise
 alerts on lifecycle changes.
 
 ## Workflow C — Circuit block generation
@@ -65,11 +65,11 @@ positions, mechanical keep-outs.
 2. Net classes and constraints from rules (widths, clearances, diff-pair
    gap/impedance from stackup).
 3. Power nets and critical nets routed first by intent (pours, wide tracks,
-   via stitching) via `eda.edit.*`; remaining nets by `eda.route`.
+   via stitching) via `kernel.edit.*`; remaining nets by `kernel.route`.
 4. DRC, return-path check, impedance check, length matching, EM sim on
    flagged structures.
 5. Repair loop; then Workflow A on the result; renders for your eyes.
-Human gate before fab export (until rung 5).
+Human gate before fab export (until rung 5). Output exported as KiCad files for you to open in KiCad or Altium.
 
 ## Sub-agents
 

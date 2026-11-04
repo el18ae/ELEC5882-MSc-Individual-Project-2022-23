@@ -16,16 +16,21 @@ electronics; do not assume time.
 3. **Every finding, rule and generated element carries provenance**: source
    document, page or section, retrieval timestamp. A finding without provenance
    is reported as "unverified opinion", never as a fact. See ADR-0004.
-4. **KiCad is the canonical substrate.** Altium files are imported into KiCad for
-   analysis and exported back only at the end. See ADR-0001.
+4. **We build our own engine.** KiCad and Altium are knowledge sources (read
+   their installed libraries, docs, templates, examples; read KiCad's source
+   from GitLab), interchange formats, and test oracles. Clean-room: never
+   copy KiCad code into the kernel; never decompile Altium. See ADR-0001
+   and docs/13.
 5. **Respect licences.** Do not ingest IPC, IEC, CISPR or other paid standards
    text. Encode rules derived from them with clause references only. Check each
    source's terms in `docs/03` before a crawler is written.
 6. **Every phase ends with the evaluation harness passing its exit criteria**
    (`docs/09`). Do not start the next phase on a "mostly working" one.
-7. **The owner's own boards are the primary test fixtures.** Ask for them in
-   Phase 0 and treat them as confidential: never upload them anywhere except
-   the Claude API calls the owner has authorised.
+7. **Golden boards are sourced and vetted from the web** (docs/08 § 8.1);
+   the owner has none to give yet. All domains are equal; balance every
+   quota across the domain list in docs/11 Q4.
+8. **Platform is Windows 11.** Native Python via `uv`; Docker Desktop for
+   Postgres; `kicad-cli.exe` from the local KiCad install as oracle only.
 
 ## Working conventions
 

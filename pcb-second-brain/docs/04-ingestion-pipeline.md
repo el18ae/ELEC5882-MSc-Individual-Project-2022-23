@@ -26,9 +26,10 @@ acquire → parse → normalise → extract → index
 | Input | Parser | Output |
 |---|---|---|
 | PDF datasheet / app note | Docling (layout-aware, table extraction) → fallback pdfplumber → OCR (Tesseract) for scanned pages | `section[]` with page ranges, tables as row/col JSON, figure crops |
-| KiCad project (`.kicad_pro/.kicad_sch/.kicad_pcb`) | s-expression parser (`kiutils` or `sexpdata`); `kicad-cli sch export netlist`; `kicad-cli pcb export` for stats | DesignIR |
-| Altium (`.SchDoc/.PcbDoc/.PrjPcb`) | KiCad importer (headless: `kicad-cli` where supported, otherwise a scripted GUI import run once per project in a batch session) → KiCad project → above | DesignIR, flagged `imported_from: altium` |
-| Eagle (`.sch/.brd`) | KiCad importer | DesignIR, flagged |
+| KiCad project (`.kicad_pro/.kicad_sch/.kicad_pcb`) | `kernel.io.kicad` | DesignIR |
+| Altium (`.SchDoc/.PcbDoc/.PrjPcb`, `.SchLib/.PcbLib`) | `kernel.io.altium` (OLE compound document + record parsers) | DesignIR, flagged `source_format: altium` |
+| Eagle (`.sch/.brd`) | `kernel.io.eagle` | DesignIR, flagged |
+| KiCad / Altium install trees | docs/13 extractors | Parts/footprint/symbol seeds, EDA docs, rule taxonomy, design notes |
 | Schematic-only PDFs (vendor eval boards) | Phase 4 stretch: vision model (Claude) page-by-page → netlist candidates → cross-checked against part pin tables; `confidence: low` | DesignIR (partial) |
 | Fab capability pages | HTML → table extraction → YAML (human-verified once) | `fabs/*.yaml` |
 

@@ -25,7 +25,7 @@ you own, and gated by checks that do not depend on the model's opinion.
 | Failure mode | Root cause | Countermeasure in this plan |
 |---|---|---|
 | Hallucinated parts, pin names, footprints | Model emits free text; nothing validates it against reality | Structured IR only; every part/pin must resolve to the parts store (ADR-0002) |
-| Design "looks right" but fails ERC/DRC or won't build | No closed loop; no compile-check-repair cycle | Generate → compile → check → repair loop with hard gates (docs/06) |
+| Design "looks right" but fails ERC/DRC or won't build | No closed loop; no compile-check-repair cycle | Generate → build in our kernel → check → repair loop with hard gates (docs/06) |
 | Missing mandatory circuitry (bootstrap caps, pull-ups, crystal load caps, RC snubbers) | Datasheet "Typical application" and "Layout guidelines" never read | Rule extraction from datasheets into machine-checkable rules with citations (docs/04, docs/07) |
 | Parts obsolete or unavailable | Static knowledge | Live distributor/lifecycle APIs at review time; availability is a check, not a memory (docs/05) |
 | Layout ignores physics | LLMs do not reason about current loops, return paths, impedance | Placement/routing delegated to engines; physics checks run as tools (openEMS/SPICE/impedance calculators); LLM only sets intents and reviews results |
@@ -42,17 +42,18 @@ you own, and gated by checks that do not depend on the model's opinion.
 3. **Provenance everywhere.** A finding cites a page. A rule cites a clause.
    A generated block cites the datasheet figure and the reference designs it
    was patterned on.
-4. **Your boards are the benchmark.** The system is "as good as you" when it
-   finds everything you would find on your own past boards, plus things you
-   missed, with no false claims. That is a measurable statement.
+4. **Vetted real boards are the benchmark.** The system is "as good as you"
+   when it finds every change the original designers made between
+   revisions of proven open boards, plus valid things they missed, with no
+   false claims. That is a measurable statement (docs/08).
 5. **Autonomy is earned per capability.** Review is auto-applied before
    generation is trusted; passive-component generation is trusted before
    power-stage generation; and so on.
 
 ## Explicit non-goals (for now)
 
-- Replacing Altium as the editor you open. KiCad is the working substrate;
-  Altium output is an export step.
+- An interactive GUI editor. The system is an engine plus an agent; you
+  open exports in Altium or KiCad when you want to look around (ADR-0001).
 - RF/microwave layout above a few GHz, and HDI/microvia stackups. The checks
   will flag these as "out of calibrated scope" rather than guess.
 - Training or fine-tuning a model. All intelligence comes from the knowledge

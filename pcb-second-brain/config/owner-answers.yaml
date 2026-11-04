@@ -1,0 +1,31 @@
+# Owner answers to docs/11. Edit freely; the build reads this file.
+answered:
+  engine: own            # own | wrap_kicad   (ADR-0001)
+  domain_priority: none  # all domains equal
+  domains:
+    - power_electronics
+    - mixed_signal_instrumentation
+    - mcu_iot
+    - high_speed_digital
+    - rf
+    - motor_drive
+    - industrial_comms   # RS-485, CAN, 4-20 mA, HART
+    - intrinsically_safe_atex
+    - automotive
+  golden_boards: web_sourced_and_vetted   # no owner boards yet
+  platform: windows_11
+  installed_tools: [kicad, altium]        # directories may be mined (docs/13)
+
+defaults_in_effect:            # change any of these to answer the question
+  Q1_existing_brain_stack: unknown
+  Q5_fabs: [jlcpcb, eurocircuits, pcbway]
+  Q6_cloud_embeddings_for_public_docs: true
+  Q7_regions: [us, eu, uk, apac]
+  Q7_regulatory: [ce, ukca, fcc_class_b]
+  Q8_api_accounts: [digikey, mouser, nexar_eval]
+  Q9_owned_standards: []
+  Q10_budget_usd_per_month: {ingestion: 300, use: 150}
+  Q13_deliverable_format: kicad_files_altium_via_importer
+  Q19_may_be_distributed: true     # strict clean-room for GPL sources
+  Q20_kicad_cli_as_interim_T1_engine: false
+  Q21_repo_name: pcb-brain

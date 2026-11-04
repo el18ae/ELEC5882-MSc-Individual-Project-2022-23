@@ -5,7 +5,7 @@
 | Tier | Nature | Examples | Who decides | Cost |
 |---|---|---|---|---|
 | **T0 Resolution** | Existence | Every BOM line → part row with pins and verified footprint; every pin in netlist exists on that part; footprint pad count = pin count | Code | ms |
-| **T1 Hard checks** | Deterministic EDA | ERC; DRC against the chosen fab's DRU; courtyard overlaps; unconnected pads; silkscreen on pads; board outline; mask slivers; drill-to-copper | kicad-cli | seconds |
+| **T1 Hard checks** | Deterministic EDA | ERC; DRC against the chosen fab's rule set; courtyard overlaps; unconnected pads; silkscreen on pads; board outline; mask slivers; drill-to-copper | kernel `erc`/`drc` (cross-checked against `kicad-cli` in evals) | seconds |
 | **T2 Rule checks** | Declarative rules × design graph | Part rules (decoupling, bootstrap, feedback divider range, thermal pad vias), interface rules (USB series R, ESD near connector, I2C pull-ups, CAN termination), fab non-DRU rules (fiducials, panel rails, part orientation), EMC/SI hygiene (return path continuity, stitching vias, loop area), style rules | Rule engine | seconds |
 | **T3 Precedent** | Statistical | Motif present in ≥ 80% of corpus designs using this part but absent here; track width for this net class below corpus 10th percentile; decoupler distance above corpus 90th percentile | Code + corpus | seconds |
 | **T4 Simulation** | Physics | ngspice operating point/transient for regulators and filters; impedance of controlled nets vs stackup; thermal estimate from copper area and dissipation; openEMS on flagged structures | Simulators | seconds–minutes |
@@ -26,8 +26,8 @@ corpus stats, sim run id), fix (structured patch or null), confidence
 ## Guard rails against the model itself
 
 1. Tool allow-lists per workflow and per sub-agent.
-2. The model cannot write EDA files; only compilers and `eda.edit.*` can,
-   and those only on working copies.
+2. The model cannot write EDA files; only the kernel can, and only on
+   working copies.
 3. Schema-validated IR; a part reference that fails T0 aborts generation.
 4. Repair loops are bounded (≤ 5) and must converge on fewer findings, else
    the workflow stops and reports.
@@ -41,10 +41,10 @@ corpus stats, sim run id), fix (structured patch or null), confidence
 | Rung | Capability unlocked | Precondition (measured by docs/08) |
 |---|---|---|
 | 0 | Review reports only; nothing applied | — |
-| 1 | Auto-apply T1/T2 fixes with unambiguous patches (add missing decoupler, fix silkscreen, swap to in-stock equivalent of the same part) | Precision ≥ 0.95 on those finding classes over ≥ 10 owner boards; zero regressions on re-check |
+| 1 | Auto-apply T1/T2 fixes with unambiguous patches (add missing decoupler, fix silkscreen, swap to in-stock equivalent of the same part) | Precision ≥ 0.95 on those finding classes over ≥ 10 golden boards; zero regressions on re-check |
 | 2 | Auto-apply all accepted-class fixes; BOM alternates | Alternates proven footprint- and rule-compatible in 100% of a 100-sample eval |
 | 3 | Generated blocks enter the library without review | Block-generation eval: 0 T0–T2 findings and ≤ 1 T3 deviation per block over 50 blocks; critic agreement |
-| 4 | Whole designs to schematic without review | Design eval on 10 re-created owner boards: functional-equivalence score (docs/08) ≥ 0.9 |
+| 4 | Whole designs to schematic without review | Design eval on 10 re-created golden boards: functional-equivalence score (docs/08) ≥ 0.9 |
 | 5 | Layout to fab-ready without review | Layout eval: 0 DRC, impedance within ±10%, return-path check clean, your blind review finds no blocker on 5 boards |
 
 Rungs are per capability class, not global; e.g. "passives around an MCU"
